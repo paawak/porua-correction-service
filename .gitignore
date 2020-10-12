@@ -1,0 +1,8 @@
+**logs
+*.log
+*~
+nbproject
+nbactions.xml
+vendor
+composer.lock
+
