@@ -25,6 +25,11 @@ Demo: <https://github.com/PHP-DI/demo>
 ## Google Authentication
 <https://developers.google.com/identity/sign-in/web/backend-auth>
 
+## .htaccess Tips
+### Echo variables
+ErrorDocument 404 "Request: %{THE_REQUEST} Referrer: %{HTTP_REFERER} Host: %{HTTP_HOST}"
+RewriteRule ^ - [L,R=404]
+
 ## Sample URLs
 ### Fetch Pages for a Book
 
@@ -57,4 +62,6 @@ curl "http://ocrservice.paawak.me/train/book"
 
  curl "http://ocrservice.paawak.me/train/page?bookId=1"
 
+   curl -X OPTIONS -i  "https://ocrservice.paawak.me"
 
+   curl -X GET -i  "https://ocrservice.paawak.me/train/book/1"
