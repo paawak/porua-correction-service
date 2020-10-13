@@ -33,9 +33,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
-//$app->add(new CorsConfigMiddleware($container, $logger));
 $app->add($container->get(CorsConfigMiddleware::class));
-
 
 $app->get('/', [IndexController::class, 'get']);
 $app->get('/train/book', [TrainingController::class, 'getAllBooks']);
