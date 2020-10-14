@@ -2,6 +2,7 @@
 
 require __DIR__ . '/com/swayam/ocr/porua/rest/IndexController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/TrainingController.php';
+require __DIR__ . '/com/swayam/ocr/porua/rest/CorsConfigMiddleware.php';
 
 use DI\Bridge\Slim\Bridge;
 use Slim\Handlers\ErrorHandler;
@@ -9,8 +10,9 @@ use Slim\Factory\ServerRequestCreatorFactory;
 use Psr\Log\LoggerInterface;
 use com\swayam\ocr\porua\rest\IndexController;
 use com\swayam\ocr\porua\rest\TrainingController;
+use com\swayam\ocr\porua\rest\CorsConfigMiddleware;
 
-$container = require __DIR__ . '/com/swayam/ocr/porua/config/bootstrap.php';
+$container = require __DIR__ . '/com/swayam/ocr/porua/config/DIContainerBootstrap.php';
 
 $app = Bridge::create($container);
 
@@ -31,15 +33,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
-$app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
-    return $response
-                    ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-                    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                    ->withHeader('Access-Control-Allow-Credentials', 'true')
-                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
-
+$app->add($container->get(CorsConfigMiddleware::class));
 
 $app->get('/', [IndexController::class, 'get']);
 $app->get('/train/book', [TrainingController::class, 'getAllBooks']);

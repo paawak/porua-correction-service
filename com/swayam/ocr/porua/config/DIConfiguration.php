@@ -6,6 +6,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Monolog\Processor\PsrLogMessageProcessor;
+use Psr\Container\ContainerInterface;
 
 return [
     LoggerInterface::class => function () {
@@ -15,13 +16,13 @@ return [
         $logger->pushProcessor(new PsrLogMessageProcessor);
         return $logger;
     },
-    EntityManager::class => function () {
+    EntityManager::class => function (ContainerInterface $container) {
         $dbParams = array(
-            'driver' => 'pdo_pgsql',
-            'user' => 'postgres',
-            'password' => 'postgres',
-            'dbname' => 'tesseract-porua',
-            'host' => 'localhost',
+            'driver' => $container->get('database.driver'),
+            'user' => $container->get('database.user'),
+            'password' => $container->get('database.password'),
+            'dbname' => $container->get('database.name'),
+            'host' => $container->get('database.host'),
             'charset' =>  'UTF8'
         );
 
