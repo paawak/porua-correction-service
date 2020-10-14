@@ -32,11 +32,14 @@ class TrainingController {
     }
 
     public function getAllBooks(Request $request, Response $response) {
-
-        $CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
-        $client = new \Google_Client(['client_id' => $CLIENT_ID]);
         $idTokenArray = $request->getHeaders()['Authorization'];
+        if (!isset($idTokenArray)) {
+            throw new Exception('could not find authorization token in the headers');
+        }
         $this->logger->info('------------- ', $idTokenArray);
+        
+        $CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
+        $client = new \Google_Client(['client_id' => $CLIENT_ID]);        
         $payload = $client->verifyIdToken($idTokenArray[0]);
         if ($payload) {
             $this->logger->info('****************** ', $payload);
