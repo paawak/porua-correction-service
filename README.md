@@ -32,6 +32,15 @@ This is a PHP based service to correct OCR words
 
 1.  <https://developers.google.com/identity/sign-in/web/backend-auth>
 
+### Unable to read Authorization header in Apache Server
+Solution: in .htaccess add the below line:
+
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
+Reference:
+1.  <https://stackoverflow.com/questions/26256730/slimframework-request-headers-don%C2%B4t-read-authorization>
+1.  <https://github.com/slimphp/Slim/issues/1616>
+
 ## .htaccess Tips
 ### Echo variables
 
