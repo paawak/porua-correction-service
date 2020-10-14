@@ -2,9 +2,9 @@
 
 return [
     'database.host' => 'localhost',
-    'database.user' => 'postgres',
-    'database.password' => 'postgres',
-    'database.name' => 'tesseract-porua',
-    'database.driver' => 'pdo_pgsql',
+    'database.user' => 'root',
+    'database.password' => 'root123',
+    'database.name' => 'porua',
+    'database.driver' => 'pdo_mysql',
     'cors.allow-origin' => 'http://localhost:3000'
 ];
