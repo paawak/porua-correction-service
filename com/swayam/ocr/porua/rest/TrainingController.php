@@ -35,11 +35,13 @@ class TrainingController {
     public function getAllBooks(Request $request, Response $response) {
         $this->logger->info('------------- ', $request->getHeaders());
 
-        if (!$request->hasHeader(AUTH_HEADER_NAME)) {
-            throw new Exception('could not find authorization token in the headers');
+        if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
+            throw new Exception('Could not find authorization token in the header');
         }
 
-        $idToken = $request->getHeader(AUTH_HEADER_NAME);
+        $idToken = $request->getHeader(self::AUTH_HEADER_NAME)[0];
+        
+        $this->logger->info('@@@@@@@@@@@@@ IdTokenfrom Oauth2: ' . $idToken);
 
         $CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
         $client = new \Google_Client(['client_id' => $CLIENT_ID]);
@@ -47,12 +49,12 @@ class TrainingController {
         if ($payload) {
             $this->logger->info('****************** ', $payload);
         } else {
-            $this->logger->info('$$$$$$$$$$$$$ Could NOT authenticate');
+            throw new Exception('Could not authenticate');
         }
 
         $books = $this->entityManager->getRepository(Book::class)->findAll();
-        $payload = json_encode($books, JSON_PRETTY_PRINT);
-        $response->getBody()->write($payload);
+        $booksAsJson = json_encode($books, JSON_PRETTY_PRINT);
+        $response->getBody()->write($booksAsJson);
         return $response->withHeader('Content-Type', 'application/json');
     }
 
