@@ -6,8 +6,10 @@ Header merge Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"  env
 Header merge Access-Control-Allow-Credentials "true"  env=add_cors
 #End Block
 
+#Set env variable with the configuration file
+SetEnv HTTP_PORUA_APPLICATION_CONFIG "MyCustomConfig.php"
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php
-
