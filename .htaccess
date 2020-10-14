@@ -9,6 +9,9 @@ Header merge Access-Control-Allow-Credentials "true"  env=add_cors
 #Set env variable with the configuration file
 SetEnv HTTP_PORUA_APPLICATION_CONFIG "MyCustomConfig.php"
 
+#Make sure authorization header is propagated even without standard format
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
