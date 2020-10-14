@@ -12,7 +12,7 @@ use com\swayam\ocr\porua\rest\IndexController;
 use com\swayam\ocr\porua\rest\TrainingController;
 use com\swayam\ocr\porua\rest\CorsConfigMiddleware;
 
-$container = require __DIR__ . '/com/swayam/ocr/porua/config/bootstrap.php';
+$container = require __DIR__ . '/com/swayam/ocr/porua/config/DIContainerBootstrap.php';
 
 $app = Bridge::create($container);
 
