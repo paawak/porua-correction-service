@@ -22,6 +22,7 @@ require_once __DIR__ . '/../dto/OcrCorrectionDto.php';
 class TrainingController {
 
     const IMAGE_STORE = '/kaaj/source/porua/tesseract-ocr-rest/images/';
+    const AUTH_HEADER_NAME = 'Authorization';
 
     private $entityManager;
     private $logger;
@@ -32,15 +33,17 @@ class TrainingController {
     }
 
     public function getAllBooks(Request $request, Response $response) {
-        $idTokenArray = $request->getHeaders()['Authorization'];
-        if (!isset($idTokenArray)) {
+        $this->logger->info('------------- ', $request->getHeaders());
+
+        if (!$request->hasHeader(AUTH_HEADER_NAME)) {
             throw new Exception('could not find authorization token in the headers');
         }
-        $this->logger->info('------------- ', $idTokenArray);
-        
+
+        $idToken = $request->getHeader(AUTH_HEADER_NAME);
+
         $CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
-        $client = new \Google_Client(['client_id' => $CLIENT_ID]);        
-        $payload = $client->verifyIdToken($idTokenArray[0]);
+        $client = new \Google_Client(['client_id' => $CLIENT_ID]);
+        $payload = $client->verifyIdToken($idToken);
         if ($payload) {
             $this->logger->info('****************** ', $payload);
         } else {
