@@ -3,6 +3,7 @@
 require __DIR__ . '/com/swayam/ocr/porua/rest/IndexController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/TrainingController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/CorsConfigMiddleware.php';
+require __DIR__ . '/com/swayam/ocr/porua/rest/AuthenticatingMiddleware.php';
 
 use DI\Bridge\Slim\Bridge;
 use Slim\Handlers\ErrorHandler;
@@ -11,6 +12,7 @@ use Psr\Log\LoggerInterface;
 use com\swayam\ocr\porua\rest\IndexController;
 use com\swayam\ocr\porua\rest\TrainingController;
 use com\swayam\ocr\porua\rest\CorsConfigMiddleware;
+use com\swayam\ocr\porua\rest\AuthenticatingMiddleware;
 
 $container = require __DIR__ . '/com/swayam/ocr/porua/config/DIContainerBootstrap.php';
 
@@ -33,6 +35,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 
+$app->add($container->get(AuthenticatingMiddleware::class));
 $app->add($container->get(CorsConfigMiddleware::class));
 
 $app->get('/', [IndexController::class, 'get']);
