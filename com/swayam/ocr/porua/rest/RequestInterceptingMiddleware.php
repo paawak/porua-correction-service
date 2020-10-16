@@ -30,6 +30,10 @@ class RequestInterceptingMiddleware {
             return $handler->handle($request);
         }
         
+        if ($request->getMethod() === 'OPTIONS') {
+            return $this->addCORSHeaders(new Response());
+        }
+        
         if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
             return $this->getNotAuthorizedResponse('Could not find authorization token in the header');
         }
