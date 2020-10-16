@@ -51,6 +51,8 @@ Reference:
 
     Deny from all
 
+## Logging with Monolog
+Github link: <https://github.com/Seldaek/monolog>
 
 ## Sample URLs
 ### Fetch Pages for a Book
