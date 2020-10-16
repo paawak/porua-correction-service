@@ -10,7 +10,7 @@ use Slim\Psr7\Response;
 use Fig\Http\Message\StatusCodeInterface;
 use \Slim\Psr7\Headers;
 
-class AuthenticatingMiddleware {
+class RequestInterceptingMiddleware {
 
     const AUTH_HEADER_NAME = 'Authorization';
     const CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
