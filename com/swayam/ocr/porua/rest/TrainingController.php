@@ -2,6 +2,7 @@
 
 namespace com\swayam\ocr\porua\rest;
 
+use Psr\Container\ContainerInterface;
 use \Exception as Exception;
 use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
@@ -21,37 +22,17 @@ require_once __DIR__ . '/../dto/OcrCorrectionDto.php';
 
 class TrainingController {
 
-    const IMAGE_STORE = '/kaaj/source/porua/tesseract-ocr-rest/images/';
-    const AUTH_HEADER_NAME = 'Authorization';
-
+    private $container;
     private $entityManager;
     private $logger;
 
-    public function __construct(EntityManager $entityManager, LoggerInterface $logger) {
+    public function __construct(ContainerInterface $container, EntityManager $entityManager, LoggerInterface $logger) {
+        $this->container = $container;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
     }
 
     public function getAllBooks(Request $request, Response $response) {
-        $this->logger->info('------------- ', $request->getHeaders());
-
-        if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
-            throw new Exception('Could not find authorization token in the header');
-        }
-
-        $idToken = $request->getHeader(self::AUTH_HEADER_NAME)[0];
-        
-        $this->logger->info('@@@@@@@@@@@@@ IdTokenfrom Oauth2: ' . $idToken);
-
-        $CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
-        $client = new \Google_Client(['client_id' => $CLIENT_ID]);
-        $payload = $client->verifyIdToken($idToken);
-        if ($payload) {
-            $this->logger->info('****************** ', $payload);
-        } else {
-            throw new Exception('Could not authenticate');
-        }
-
         $books = $this->entityManager->getRepository(Book::class)->findAll();
         $booksAsJson = json_encode($books, JSON_PRETTY_PRINT);
         $response->getBody()->write($booksAsJson);
@@ -134,7 +115,7 @@ class TrainingController {
             'ocrWordId.wordSequenceId' => $wordSequenceId
         ));
 
-        $imageFullPath = self::IMAGE_STORE . $pageName;
+        $imageFullPath = $this->container->get('ocr.imageStore') . $pageName;
         $imageMimeType = $this->getImageMimeType($imageFullPath);
 
         $wordImage = $this->getWordImageToWrite($imageFullPath, $ocrWord, $imageMimeType);

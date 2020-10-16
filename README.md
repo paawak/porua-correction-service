@@ -7,15 +7,6 @@ This is a PHP based service to correct OCR words
     /kaaj/installs/php/composer/composer.phar install
     /kaaj/installs/php/composer/composer.phar update
 
-## ORM Library Doctrine
-1.  Getting Started: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#getting-started-with-doctrine>
-1.  Configuration: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/configuration.html>
-1.  Repository Pattern: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#entity-repositories>
-
-### Update Queries
-1.  <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/dql-doctrine-query-language.html#update-queries>
-1.  <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#updating-entities>
-
 ## REST Library Slim
 1.  <http://www.slimframework.com/docs/v4/>
 1.  <http://www.slimframework.com/docs/v4/objects/request.html>
@@ -27,6 +18,15 @@ This is a PHP based service to correct OCR words
 1.  <https://php-di.org/doc/frameworks/slim.html>
 1.  <https://php-di.org/doc/container-configuration.html>
 1.  Demo: <https://github.com/PHP-DI/demo>
+
+## ORM Library Doctrine
+1.  Getting Started: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#getting-started-with-doctrine>
+1.  Configuration: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/configuration.html>
+1.  Repository Pattern: <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#entity-repositories>
+
+### Update Queries
+1.  <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/dql-doctrine-query-language.html#update-queries>
+1.  <https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/tutorials/getting-started.html#updating-entities>
 
 ## Google Authentication
 
@@ -46,6 +46,13 @@ Reference:
 
     ErrorDocument 404 "Request: %{THE_REQUEST} Referrer: %{HTTP_REFERER} Host: %{HTTP_HOST}"
     RewriteRule ^ - [L,R=404]
+
+### Deny access to all
+
+    Deny from all
+
+## Logging with Monolog
+Github link: <https://github.com/Seldaek/monolog>
 
 ## Sample URLs
 ### Fetch Pages for a Book

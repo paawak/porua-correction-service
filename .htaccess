@@ -1,9 +1,9 @@
 # Start Block: set some cors headers only when request method is OPTIONS
 SetEnvIf Request_Method "OPTIONS" add_cors=true
-Header merge Access-Control-Allow-Origin "http://ocr.paawak.me"  env=add_cors
-Header merge Access-Control-Allow-Headers "X-Requested-With, Content-Type, Accept, Origin, Authorization"  env=add_cors
-Header merge Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"  env=add_cors
-Header merge Access-Control-Allow-Credentials "true"  env=add_cors
+Header add Access-Control-Allow-Origin "http://ocr.paawak.me"  env=add_cors
+Header add Access-Control-Allow-Headers "X-Requested-With, Content-Type, Accept, Origin, Authorization"  env=add_cors
+Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"  env=add_cors
+Header add Access-Control-Allow-Credentials "true"  env=add_cors
 #End Block
 
 #Set env variable with the configuration file
@@ -15,4 +15,4 @@ SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php
+RewriteRule ^ index.php [QSA,L]
