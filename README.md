@@ -47,6 +47,11 @@ Reference:
     ErrorDocument 404 "Request: %{THE_REQUEST} Referrer: %{HTTP_REFERER} Host: %{HTTP_HOST}"
     RewriteRule ^ - [L,R=404]
 
+### Deny access to all
+
+    Deny from all
+
+
 ## Sample URLs
 ### Fetch Pages for a Book
 
