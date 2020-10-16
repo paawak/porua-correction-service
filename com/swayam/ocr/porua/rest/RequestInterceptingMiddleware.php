@@ -24,9 +24,14 @@ class RequestInterceptingMiddleware {
     }
 
     public function __invoke(Request $request, RequestHandler $handler): Response {
-        $this->logger->info("Handling request of type " . $request->getMethod());
+        $this->logger->info("Handling request of type: " . $request->getMethod() . ", with target-uri: " . $request->getRequestTarget());
+        
+        if ($request->getRequestTarget() === '/') {
+            return $handler->handle($request);
+        }
+        
         if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
-            return $this->notAuthorized('Could not find authorization token in the header');
+            return $this->getNotAuthorizedResponse('Could not find authorization token in the header');
         }
 
         $idToken = $request->getHeader(self::AUTH_HEADER_NAME)[0];
@@ -38,13 +43,17 @@ class RequestInterceptingMiddleware {
         if ($payload) {
             $this->logger->debug('Payload: ', $payload);
         } else {
-            return $this->notAuthorized('Could not authenticate');
+            return $this->getNotAuthorizedResponse('Could not authenticate');
         }
+        
+        //call the actual handler now that this is authenticated
         $response = $handler->handle($request);
-        return $this->cors($response);
+        
+        //add CORS before returning
+        return $this->addCORSHeaders($response);
     }
 
-    private function notAuthorized(string $reasonPhrase): Response {
+    private function getNotAuthorizedResponse(string $reasonPhrase): Response {
         $this->logger->warning('Not authorised: ' . $reasonPhrase);
         $headers = new Headers();
         $headers->addHeader('Content-Type', 'application/json');
@@ -55,7 +64,7 @@ class RequestInterceptingMiddleware {
         return $response;
     }
 
-    private function cors(Response $response): Response {
+    private function addCORSHeaders(Response $response): Response {
         return $response
                         ->withHeader('Access-Control-Allow-Origin', $this->container->get('cors.allow-origin'))
                         ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
