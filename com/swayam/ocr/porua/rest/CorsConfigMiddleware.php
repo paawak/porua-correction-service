@@ -19,7 +19,7 @@ class CorsConfigMiddleware {
     }
 
     public function __invoke(Request $request, RequestHandler $handler): Response {
-        $this->logger->info("In " . CorsConfigMiddleware::class . ", handling " . $request->getMethod());
+        $this->logger->info("Handling " . $request->getMethod());
         $response = $handler->handle($request);
         return $response
                         ->withHeader('Access-Control-Allow-Origin', $this->container->get('cors.allow-origin'))

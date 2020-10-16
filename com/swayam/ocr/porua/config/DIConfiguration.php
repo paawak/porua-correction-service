@@ -6,8 +6,8 @@ use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
+use Monolog\Processor\IntrospectionProcessor;
 use Psr\Log\LoggerInterface;
-use Monolog\Processor\PsrLogMessageProcessor;
 use Psr\Container\ContainerInterface;
 
 return [
@@ -25,7 +25,7 @@ return [
         $consoleHandler->setFormatter($formatter);
         $logger->pushHandler($consoleHandler); 
         
-        $logger->pushProcessor(new PsrLogMessageProcessor);
+        $logger->pushProcessor(new IntrospectionProcessor());
         return $logger;
     },
     EntityManager::class => function (ContainerInterface $container) {
