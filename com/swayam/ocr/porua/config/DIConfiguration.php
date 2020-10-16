@@ -22,9 +22,11 @@ return [
         $fileHandler->setFormatter($formatter);
         $logger->pushHandler($fileHandler);
 
-        $consoleHandler = new StreamHandler('php://stdout', Logger::DEBUG);
-        $consoleHandler->setFormatter($formatter);
-        $logger->pushHandler($consoleHandler);
+        if ($container->get('logger.console') === true) {
+            $consoleHandler = new StreamHandler('php://stdout', Logger::DEBUG);
+            $consoleHandler->setFormatter($formatter);
+            $logger->pushHandler($consoleHandler);
+        }
 
         $logger->pushProcessor(new IntrospectionProcessor());
 
