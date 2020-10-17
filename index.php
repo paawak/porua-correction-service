@@ -43,8 +43,8 @@ $app->put('/train/page/ignore/{pageImageId}', [TrainingController::class, 'markP
 $app->put('/train/page/complete/{pageImageId}', [TrainingController::class, 'markPageAsCompleted']);
 $app->get('/train/word', [TrainingController::class, 'getWordsInPage']);
 $app->get('/train/word/image', [TrainingController::class, 'getWordImage']);
-$app->put('/train/word', [TrainingController::class, 'applyCorrectionToOcrWords']);
-$app->put('/train/word/ignore', [TrainingController::class, 'markOcrWordsAsIgnored']);
+$app->post('/train/word', [TrainingController::class, 'applyCorrectionToOcrWords']);
+$app->post('/train/word/ignore', [TrainingController::class, 'markOcrWordsAsIgnored']);
 
 $app->run();
 ?>

@@ -32,13 +32,19 @@ class RequestInterceptingMiddleware {
         
         if ($request->getMethod() === 'OPTIONS') {
             return $this->addCORSHeaders(new Response());
+        }               
+
+        $idToken = null;
+        
+        if (strstr($request->getRequestTarget(), '/train/word/image')) {
+            $idToken = $this->getAuthFromGetRequest($request);
+        } else {            
+            $idToken = $this->getAuthFromHeaders($request);
         }
         
-        if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
-            return $this->getNotAuthorizedResponse('Could not find authorization token in the header');
+        if (!$idToken) {
+            return $this->getNotAuthorizedResponse('Could not find authorization token');
         }
-
-        $idToken = $request->getHeader(self::AUTH_HEADER_NAME)[0];
 
         $this->logger->debug('IdToken from OAuth2: ' . $idToken);
 
@@ -55,6 +61,19 @@ class RequestInterceptingMiddleware {
         
         //add CORS before returning
         return $this->addCORSHeaders($response);
+    }
+    
+    private function getAuthFromHeaders(Request $request): string {
+        if (!$request->hasHeader(self::AUTH_HEADER_NAME)) {
+            return null;
+        }
+        return $request->getHeader(self::AUTH_HEADER_NAME)[0];
+    }
+    
+    private function getAuthFromGetRequest(Request $request): string {
+        $queryParams = $request->getQueryParams();
+        $this->logger->debug('query params: ', $queryParams);
+        return $queryParams[self::AUTH_HEADER_NAME];
     }
 
     private function getNotAuthorizedResponse(string $reasonPhrase): Response {
