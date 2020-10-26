@@ -1,7 +1,8 @@
 <?php
 
 require __DIR__ . '/com/swayam/ocr/porua/rest/IndexController.php';
-require __DIR__ . '/com/swayam/ocr/porua/rest/TrainingController.php';
+require __DIR__ . '/com/swayam/ocr/porua/rest/OCRQueryController.php';
+require __DIR__ . '/com/swayam/ocr/porua/rest/OCRCorrectionController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/RequestInterceptingMiddleware.php';
 
 use DI\Bridge\Slim\Bridge;
@@ -9,7 +10,8 @@ use Slim\Handlers\ErrorHandler;
 use Slim\Factory\ServerRequestCreatorFactory;
 use Psr\Log\LoggerInterface;
 use com\swayam\ocr\porua\rest\IndexController;
-use com\swayam\ocr\porua\rest\TrainingController;
+use com\swayam\ocr\porua\rest\OCRQueryController;
+use com\swayam\ocr\porua\rest\OCRCorrectionController;
 use com\swayam\ocr\porua\rest\RequestInterceptingMiddleware;
 
 $container = require __DIR__ . '/com/swayam/ocr/porua/config/DIContainerBootstrap.php';
@@ -36,15 +38,17 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 $app->add($container->get(RequestInterceptingMiddleware::class));
 
 $app->get('/', [IndexController::class, 'get']);
-$app->get('/train/book', [TrainingController::class, 'getAllBooks']);
-$app->get('/train/book/{bookId}/page-count', [TrainingController::class, 'getPageCountInBook']);
-$app->get('/train/page', [TrainingController::class, 'getPagesInBook']);
-$app->put('/train/page/ignore/{pageImageId}', [TrainingController::class, 'markPageAsIgnored']);
-$app->put('/train/page/complete/{pageImageId}', [TrainingController::class, 'markPageAsCompleted']);
-$app->get('/train/word', [TrainingController::class, 'getWordsInPage']);
-$app->get('/train/word/image', [TrainingController::class, 'getWordImage']);
-$app->post('/train/word', [TrainingController::class, 'applyCorrectionToOcrWords']);
-$app->post('/train/word/ignore', [TrainingController::class, 'markOcrWordsAsIgnored']);
+
+$app->get('/ocr/train/query/book', [OCRQueryController::class, 'getAllBooks']);
+$app->get('/ocr/train/query/book/{bookId}/page-count', [OCRQueryController::class, 'getPageCountInBook']);
+$app->get('/ocr/train/query/page', [OCRQueryController::class, 'getPagesInBook']);
+$app->get('/ocr/train/query/word', [OCRQueryController::class, 'getWordsInPage']);
+$app->get('/ocr/train/query/word/image', [OCRQueryController::class, 'getWordImage']);
+
+$app->put('/ocr/train/correction/page/ignore/{pageImageId}', [OCRCorrectionController::class, 'markPageAsIgnored']);
+$app->put('/ocr/train/correction/page/complete/{pageImageId}', [OCRCorrectionController::class, 'markPageAsCompleted']);
+$app->post('/ocr/train/correction/word', [OCRCorrectionController::class, 'applyCorrectionToOcrWords']);
+$app->post('/ocr/train/correction/word/ignore', [OCRCorrectionController::class, 'markOcrWordsAsIgnored']);
 
 $app->run();
 ?>

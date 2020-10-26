@@ -14,6 +14,7 @@ class RequestInterceptingMiddleware {
 
     const AUTH_HEADER_NAME = 'Authorization';
     const CLIENT_ID = '955630342713-55eu6b3k5hmsg8grojjmk8mj1gi47g37.apps.googleusercontent.com';
+    const URL_IMAGE_FETCH = '/ocr/train/query/word/image';
 
     private $container;
     private $logger;
@@ -36,7 +37,7 @@ class RequestInterceptingMiddleware {
 
         $idToken = null;
         
-        if (strstr($request->getRequestTarget(), '/train/word/image')) {
+        if (strstr($request->getRequestTarget(), self::URL_IMAGE_FETCH)) {
             $idToken = $this->getAuthFromGetRequest($request);
         } else {            
             $idToken = $this->getAuthFromHeaders($request);
