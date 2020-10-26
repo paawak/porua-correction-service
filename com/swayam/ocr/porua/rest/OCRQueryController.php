@@ -11,14 +11,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use com\swayam\ocr\porua\model\Book;
 use com\swayam\ocr\porua\model\PageImage;
 use com\swayam\ocr\porua\model\OcrWord;
-use \com\swayam\ocr\porua\model\OcrWordId;
-use com\swayam\ocr\porua\dto\OcrCorrectionDto;
 
 require_once __DIR__ . '/../model/Book.php';
 require_once __DIR__ . '/../model/PageImage.php';
 require_once __DIR__ . '/../model/OcrWord.php';
-require_once __DIR__ . '/../model/OcrWordId.php';
-require_once __DIR__ . '/../dto/OcrCorrectionDto.php';
 
 class OCRQueryController {
 
