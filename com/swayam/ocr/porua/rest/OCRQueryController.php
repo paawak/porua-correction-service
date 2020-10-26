@@ -52,6 +52,7 @@ class OCRQueryController {
         $pages = $this->entityManager->getRepository(PageImage::class)->findBy(
                 array(
                     'book' => $bookId,
+                    'correctionCompleted' => false,
                     'ignored' => false
                 ),
                 array('pageNumber' => 'ASC')
