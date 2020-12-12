@@ -1,5 +1,5 @@
 {
-    "name": "paawk/porua-correction-service",
+    "name": "paawak/porua-correction-service",
     "description": "Correction service for Porua OCR",
     "license": "proprietary",
     "require": {
