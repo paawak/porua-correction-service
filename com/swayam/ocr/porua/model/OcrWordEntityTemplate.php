@@ -54,7 +54,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
     /**
      * @OneToMany(targetEntity="CorrectedWordEntityTemplate", mappedBy="ocrWordId")
      */
-    private $correctedWords;
+    private $correctedWords = array();
 
     public function getId(): int {
         return $this->id;
@@ -132,7 +132,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         $this->lineNumber = $lineNumber;
     }
 
-    public function setCorrectedWords($correctedWords): void {
+    public function setCorrectedWords(array $correctedWords): void {
         $this->correctedWords = $correctedWords;
     }
 
