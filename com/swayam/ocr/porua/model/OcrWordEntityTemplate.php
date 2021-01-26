@@ -92,7 +92,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         return $this->lineNumber;
     }
 
-    public function getCorrectedWords() {
+    public function getCorrectedWords(): array {
         return $this->correctedWords;
     }
 

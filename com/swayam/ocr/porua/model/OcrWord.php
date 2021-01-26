@@ -26,6 +26,6 @@ interface OcrWord {
 
     function getLineNumber():int;
 
-    function getCorrectedWords();
+    function getCorrectedWords(): array;
     
 }
