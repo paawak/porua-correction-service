@@ -11,6 +11,8 @@ use \com\swayam\ocr\porua\repo\CorrectedWordRepository;
 use \com\swayam\ocr\porua\repo\OcrWordRepositoryImpl;
 use \com\swayam\ocr\porua\repo\CorrectedWordRepositoryImpl;
 
+require_once __DIR__ . '/OcrWordService.php';
+
 /**
  *
  * @author paawak

@@ -13,6 +13,8 @@ use Psr\Container\ContainerInterface;
 use com\swayam\ocr\porua\service\OcrWordService;
 use com\swayam\ocr\porua\service\OcrWordServiceImpl;
 
+require_once __DIR__ . '/../service/OcrWordServiceImpl.php';
+
 return [
     LoggerInterface::class => function (ContainerInterface $container) {
         $dateFormat = "Y-m-d\TH:i:sP";
