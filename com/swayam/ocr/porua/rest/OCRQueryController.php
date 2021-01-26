@@ -11,6 +11,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use com\swayam\ocr\porua\model\Book;
 use com\swayam\ocr\porua\model\PageImage;
 use com\swayam\ocr\porua\model\OcrWord;
+use com\swayam\ocr\porua\model\OcrWordId;
+use com\swayam\ocr\porua\service\OcrWordService;
 
 require_once __DIR__ . '/../model/Book.php';
 require_once __DIR__ . '/../model/PageImage.php';
@@ -21,11 +23,13 @@ class OCRQueryController {
     private $container;
     private $entityManager;
     private $logger;
+    private $ocrWordService;
 
-    public function __construct(ContainerInterface $container, EntityManager $entityManager, LoggerInterface $logger) {
+    public function __construct(ContainerInterface $container, EntityManager $entityManager, LoggerInterface $logger, OcrWordService $ocrWordService) {
         $this->container = $container;
         $this->entityManager = $entityManager;
         $this->logger = $logger;
+        $this->ocrWordService = $ocrWordService;
     }
 
     public function getAllBooks(Request $request, Response $response) {
@@ -62,14 +66,7 @@ class OCRQueryController {
         $queryParams = $request->getQueryParams();
         $bookId = $queryParams["bookId"];
         $pageImageId = $queryParams["pageImageId"];
-        $words = $this->entityManager->getRepository(OcrWord::class)->findBy(
-                array(
-                    'ocrWordId.bookId' => $bookId,
-                    'ocrWordId.pageImageId' => $pageImageId,
-                    'ignored' => false
-                ),
-                array('ocrWordId.wordSequenceId' => 'ASC')
-        );
+        $words = $this->ocrWordService->getWords($bookId, $pageImageId);
         $payload = json_encode($words, JSON_PRETTY_PRINT);
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');
@@ -83,12 +80,13 @@ class OCRQueryController {
         $pageName = $this->entityManager->getRepository(PageImage::class)->findOneBy(array(
                     'id' => $pageImageId
                 ))->getName();
+        
+        $ocrWordId = new OcrWordId();
+        $ocrWordId->setBookId($bookId);
+        $ocrWordId->setPageImageId($pageImageId);
+        $ocrWordId->setWordSequenceId($wordSequenceId);
 
-        $ocrWord = $this->entityManager->getRepository(OcrWord::class)->findOneBy(array(
-            'ocrWordId.bookId' => $bookId,
-            'ocrWordId.pageImageId' => $pageImageId,
-            'ocrWordId.wordSequenceId' => $wordSequenceId
-        ));
+        $ocrWord = $this->ocrWordService->getWord($ocrWordId);
 
         $imageFullPath = $this->container->get('ocr.imageStore') . $pageName;
         $imageMimeType = $this->getImageMimeType($imageFullPath);

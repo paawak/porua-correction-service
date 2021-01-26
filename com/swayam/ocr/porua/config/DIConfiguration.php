@@ -10,6 +10,8 @@ use Monolog\Processor\IntrospectionProcessor;
 use Monolog\ErrorHandler;
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
+use com\swayam\ocr\porua\service\OcrWordService;
+use com\swayam\ocr\porua\service\OcrWordServiceImpl;
 
 return [
     LoggerInterface::class => function (ContainerInterface $container) {
@@ -52,5 +54,8 @@ return [
 
         $entityManager = EntityManager::create($dbParams, $config);
         return $entityManager;
+    },
+    OcrWordService::class => function (EntityManager $entityManager) {
+        return new OcrWordServiceImpl($entityManager);
     }
 ];
