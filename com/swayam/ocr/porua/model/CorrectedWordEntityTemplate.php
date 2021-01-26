@@ -3,10 +3,14 @@
 namespace com\swayam\ocr\porua\model;
 
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
+
+require_once __DIR__ . '/CorrectedWord.php';
 
 /**
  * @Entity
@@ -19,7 +23,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
      * @Column(type="integer")
      * @GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
      * @OneToOne(targetEntity="UserDetails") 
@@ -28,15 +32,15 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
     private UserDetails $user;
 
     /** @Column(name = "ocr_word_id", type="integer") */
-    private $ocrWordId;
+    private int $ocrWordId;
 
     /** @Column(name = "corrected_text") */
-    private $correctedText;
+    private string $correctedText;
 
     /** @Column(type="boolean") */
-    private $ignored;
+    private boolean $ignored;
 
-    public function getId() {
+    public function getId(): int {
         return $this->id;
     }
 
@@ -44,19 +48,19 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         return $this->user;
     }
 
-    public function getOcrWordId() {
+    public function getOcrWordId(): int {
         return $this->ocrWordId;
     }
 
-    public function getCorrectedText() {
+    public function getCorrectedText(): string {
         return $this->correctedText;
     }
 
-    public function isIgnored() {
+    public function isIgnored(): boolean {
         return $this->ignored;
     }
 
-    public function setId($id): void {
+    public function setId(int $id): void {
         $this->id = $id;
     }
 
@@ -64,15 +68,15 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         $this->user = $user;
     }
 
-    public function setOcrWordId($ocrWordId): void {
+    public function setOcrWordId(int $ocrWordId): void {
         $this->ocrWordId = $ocrWordId;
     }
 
-    public function setCorrectedText($correctedText): void {
+    public function setCorrectedText(string $correctedText): void {
         $this->correctedText = $correctedText;
     }
 
-    public function setIgnored($ignored): void {
+    public function setIgnored(boolean $ignored): void {
         $this->ignored = $ignored;
     }
 

@@ -8,6 +8,9 @@ use \com\swayam\ocr\porua\model\OcrWordId;
 use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\OcrWordEntityTemplate;
 
+require_once __DIR__ . '/OcrWordRepository.php';
+require_once __DIR__ . '/../model/OcrWordEntityTemplate.php';
+
 /**
  *
  * @author paawak
@@ -29,12 +32,11 @@ class OcrWordRepositoryImpl implements OcrWordRepository {
         return $ocrWord;
     }
 
-    public function getWordsInPage(integer $bookId, integer $pageImageId): array {
+    public function getWordsInPage(int $bookId, int $pageImageId): array {
         $words = $this->getRepository()->findBy(
                 array(
                     'ocrWordId.bookId' => $bookId,
-                    'ocrWordId.pageImageId' => $pageImageId,
-                    'ignored' => false
+                    'ocrWordId.pageImageId' => $pageImageId
                 ),
                 array('ocrWordId.wordSequenceId' => 'ASC')
         );

@@ -13,5 +13,5 @@ interface OcrWordRepository {
 
     function getWord(OcrWordId $ocrWordId): OcrWord;
 
-    function getWordsInPage(integer $bookId, integer $pageImageId): array;
+    function getWordsInPage(int $bookId, int $pageImageId): array;
 }

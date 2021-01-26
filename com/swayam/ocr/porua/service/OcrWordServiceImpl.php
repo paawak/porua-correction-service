@@ -12,6 +12,8 @@ use \com\swayam\ocr\porua\repo\OcrWordRepositoryImpl;
 use \com\swayam\ocr\porua\repo\CorrectedWordRepositoryImpl;
 
 require_once __DIR__ . '/OcrWordService.php';
+require_once __DIR__ . '/../repo/OcrWordRepositoryImpl.php';
+require_once __DIR__ . '/../repo/CorrectedWordRepositoryImpl.php';
 
 /**
  *
@@ -29,24 +31,24 @@ class OcrWordServiceImpl implements OcrWordService {
         return $this->getOcrWordRepository()->getWord($ocrWordId);
     }
 
-    public function getWords(integer $bookId, integer $pageImageId): array {
+    public function getWords(int $bookId, int $pageImageId): array {
         return $this->getOcrWordRepository()->getWordsInPage($bookId, $pageImageId);
     }
 
-    public function markWordAsIgnored(integer $ocrWordId, UserDetails $user): integer {
+    public function markWordAsIgnored(int $ocrWordId, UserDetails $user): int {
         
     }
 
-    public function updateCorrectTextInOcrWord(integer $ocrWordId, string $correctedText, UserDetails $user): integer {
+    public function updateCorrectTextInOcrWord(int $ocrWordId, string $correctedText, UserDetails $user): int {
         
     }
     
     private function getOcrWordRepository(): OcrWordRepository {
-        return new OcrWordRepositoryImpl($entityManager);
+        return new OcrWordRepositoryImpl($this->entityManager);
     }
     
     private function getCorrectedWordRepository(): CorrectedWordRepository {
-        return new CorrectedWordRepositoryImpl($entityManager);
+        return new CorrectedWordRepositoryImpl($this->entityManager);
     }
 
 }

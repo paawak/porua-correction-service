@@ -14,9 +14,9 @@ interface OcrWordService {
 
     function getWord(OcrWordId $ocrWordId): OcrWord;
 
-    function getWords(integer $bookId, integer $pageImageId): array;
+    function getWords(int $bookId, int $pageImageId): array;
 
-    function updateCorrectTextInOcrWord(integer $ocrWordId, string $correctedText, UserDetails $user): integer;
+    function updateCorrectTextInOcrWord(int $ocrWordId, string $correctedText, UserDetails $user): int;
 
-    function markWordAsIgnored(integer $ocrWordId, UserDetails $user): integer;
+    function markWordAsIgnored(int $ocrWordId, UserDetails $user): int;
 }

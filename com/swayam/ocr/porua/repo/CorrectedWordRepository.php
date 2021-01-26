@@ -11,11 +11,11 @@ use \com\swayam\ocr\porua\model\UserDetails;
  */
 interface CorrectedWordRepository {
 
-    function getCorrectedWord(integer $ocrWordId, UserDetails $user): CorrectedWord;
+    function getCorrectedWord(int $ocrWordId, UserDetails $user): CorrectedWord;
 
     function save(CorrectedWord $entity): CorrectedWord;
 
-    function updateCorrectedText(integer $ocrWordId, string $correctedText, UserDetails $user): integer;
+    function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int;
 
-    function markAsIgnored(integer $ocrWordId, UserDetails $user): integer;
+    function markAsIgnored(int $ocrWordId, UserDetails $user): int;
 }

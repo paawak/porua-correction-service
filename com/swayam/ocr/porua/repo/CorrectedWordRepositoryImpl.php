@@ -8,6 +8,8 @@ use \com\swayam\ocr\porua\model\CorrectedWord;
 use com\swayam\ocr\porua\model\CorrectedWordEntityTemplate;
 use \com\swayam\ocr\porua\model\UserDetails;
 
+require_once __DIR__ . '/CorrectedWordRepository.php';
+
 /**
  *
  * @author paawak
@@ -20,7 +22,7 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
         $this->entityManager = $entityManager;
     }
 
-    public function getCorrectedWord(integer $ocrWordId, UserDetails $user): CorrectedWord {
+    public function getCorrectedWord(int $ocrWordId, UserDetails $user): CorrectedWord {
         $correctedWord = $this->getRepository()->findOneBy(array(
             'ocrWordId' => $ocrWordId,
             'user.id' => $user->getId()
@@ -32,7 +34,7 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
         return $this->entityManager->persist($entity);
     }
 
-    public function updateCorrectedText(integer $ocrWordId, string $correctedText, UserDetails $user): integer {
+    public function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int {
         $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.correctedText = :correctedText WHERE word.ocrWordId = :ocrWordId AND word.user.id = :userId";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
@@ -43,7 +45,7 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
         return $updated;
     }
 
-    public function markAsIgnored(integer $ocrWordId, UserDetails $user): integer {
+    public function markAsIgnored(int $ocrWordId, UserDetails $user): int {
         $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.ignored = TRUE WHERE word.ocrWordId = :ocrWordId AND word.user.id = :userId";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
