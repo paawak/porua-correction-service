@@ -3,6 +3,7 @@
 namespace com\swayam\ocr\porua\repo;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectRepository;
 use \com\swayam\ocr\porua\model\OcrWordId;
 use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\OcrWordEntityTemplate;
@@ -20,16 +21,16 @@ class OcrWordRepositoryImpl implements OcrWordRepository {
     }
 
     public function getWord(OcrWordId $ocrWordId): OcrWord {
-        $ocrWord = $this->entityManager->getRepository(OcrWordEntityTemplate::class)->findOneBy(array(
+        $ocrWord = $this->getRepository()->findOneBy(array(
             'ocrWordId.bookId' => $ocrWordId->getBookId(),
             'ocrWordId.pageImageId' => $ocrWordId->getPageImageId(),
             'ocrWordId.wordSequenceId' => $ocrWordId->getWordSequenceId()
-        ));
+        ));        
         return $ocrWord;
     }
 
     public function getWordsInPage(integer $bookId, integer $pageImageId): array {
-        $words = $this->entityManager->getRepository(OcrWordEntityTemplate::class)->findBy(
+        $words = $this->getRepository()->findBy(
                 array(
                     'ocrWordId.bookId' => $bookId,
                     'ocrWordId.pageImageId' => $pageImageId,
@@ -39,6 +40,10 @@ class OcrWordRepositoryImpl implements OcrWordRepository {
         );
 
         return $words;
+    }
+    
+    private function getRepository(): ObjectRepository {
+        return $this->entityManager->getRepository(OcrWordEntityTemplate::class);
     }
 
 }
