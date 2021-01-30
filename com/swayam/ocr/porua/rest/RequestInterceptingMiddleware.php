@@ -56,22 +56,22 @@ class RequestInterceptingMiddleware {
 
         if (!$payload) {
             return $this->getNotAuthorizedResponse('Could not authenticate');
-        } else {
-            $userDetails = $this->userService->fetchExistingUser($payload);
-            
-            if (!$userDetails && strstr($request->getRequestTarget(), self::URL_REGISTRATION)) {
-                $userDetails = $this->userService->registerNewUser($payload);
-            }
-
-            if (!$userDetails) {
-                return $this->getNotAuthorizedResponse('Error registering user');
-            } else {
-                $request = $request->withAttribute(UserService::USER_DETAILS, $userDetails);
-            }
         }
 
+        $userDetails = $this->userService->fetchExistingUser($payload);
+
+        if (!$userDetails && strstr($request->getRequestTarget(), self::URL_REGISTRATION)) {
+            $userDetails = $this->userService->registerNewUser($payload);
+        }
+
+        if (!$userDetails) {
+            return $this->getNotAuthorizedResponse('Error registering user');
+        }
+
+        $requestWithAttribute = $request->withAttribute(UserService::USER_DETAILS, $userDetails);
+
         //call the actual handler now that this is authenticated
-        $response = $handler->handle($request);
+        $response = $handler->handle($requestWithAttribute);
 
         //add CORS before returning
         return $this->addCORSHeaders($response);
