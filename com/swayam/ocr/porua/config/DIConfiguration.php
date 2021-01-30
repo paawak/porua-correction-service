@@ -12,8 +12,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use com\swayam\ocr\porua\service\OcrWordService;
 use com\swayam\ocr\porua\service\OcrWordServiceImpl;
+use com\swayam\ocr\porua\service\UserService;
+use com\swayam\ocr\porua\service\UserServiceImpl;
 
 require_once __DIR__ . '/../service/OcrWordServiceImpl.php';
+require_once __DIR__ . '/../service/UserServiceImpl.php';
 
 return [
     LoggerInterface::class => function (ContainerInterface $container) {
@@ -59,5 +62,8 @@ return [
     },
     OcrWordService::class => function (EntityManager $entityManager) {
         return new OcrWordServiceImpl($entityManager);
+    },
+    UserService::class => function (LoggerInterface $logger) {
+        return new UserServiceImpl($logger);
     }
 ];
