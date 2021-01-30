@@ -21,7 +21,7 @@ require_once __DIR__ . '/../repo/CorrectedWordRepositoryImpl.php';
  */
 class OcrWordServiceImpl implements OcrWordService {
 
-    private $entityManager;
+    private EntityManager $entityManager;
 
     public function __construct(EntityManager $entityManager) {
         $this->entityManager = $entityManager;

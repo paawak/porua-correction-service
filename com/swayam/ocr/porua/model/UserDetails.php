@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\Column;
 
 /**
  * @Entity
- * @Table(name="book")
+ * @Table(name="user")
  */
 class UserDetails implements \JsonSerializable {
 

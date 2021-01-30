@@ -3,6 +3,7 @@
 namespace com\swayam\ocr\porua\service;
 
 use Psr\Log\LoggerInterface;
+use Doctrine\ORM\EntityManager;
 use com\swayam\ocr\porua\model\UserDetails;
 
 require_once __DIR__ . '/UserService.php';
@@ -15,17 +16,17 @@ require_once __DIR__ . '/../model/UserDetails.php';
 class UserServiceImpl implements UserService {
 
     private LoggerInterface $logger;
+    private EntityManager $entityManager;
 
-    public function __construct(LoggerInterface $logger) {
+    public function __construct(LoggerInterface $logger, EntityManager $entityManager) {
         $this->logger = $logger;
+        $this->entityManager = $entityManager;
     }
 
     public function fetchExistingUser(array $payload): UserDetails {
-        $this->logger->info("PAYLOAD", $payload);
-        $userDetails = new UserDetails();
-        $userDetails->setEmail("DUMMY");
-        $userDetails->setId(-1);
-        $userDetails->setName("Dummy");
+        $userDetails = $this->entityManager->getRepository(UserDetails::class)->findOneBy(array(
+            'email' => $payload['email']
+        ));
         return $userDetails;
     }
 

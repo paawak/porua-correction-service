@@ -63,7 +63,7 @@ return [
     OcrWordService::class => function (EntityManager $entityManager) {
         return new OcrWordServiceImpl($entityManager);
     },
-    UserService::class => function (LoggerInterface $logger) {
-        return new UserServiceImpl($logger);
+    UserService::class => function (LoggerInterface $logger, EntityManager $entityManager) {
+        return new UserServiceImpl($logger, $entityManager);
     }
 ];
