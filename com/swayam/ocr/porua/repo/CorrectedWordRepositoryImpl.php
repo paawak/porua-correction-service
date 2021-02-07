@@ -41,22 +41,22 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
     }
 
     public function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int {
-        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.correctedText = :correctedText WHERE word.ocrWordId = :ocrWordId AND word.user.id = :userId";
+        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.correctedText = :correctedText WHERE word.ocrWordId = :ocrWordId AND word.user = :user";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
             'ocrWordId' => $ocrWordId,
             'correctedText' => $correctedText,
-            'userId' => $user->getId()
+            'user' => $user
         ));
         return $updated;
     }
 
     public function markAsIgnored(int $ocrWordId, UserDetails $user): int {
-        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.ignored = TRUE WHERE word.ocrWordId = :ocrWordId AND word.user.id = :userId";
+        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.ignored = TRUE WHERE word.ocrWordId = :ocrWordId AND word.user = :user";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
             'ocrWordId' => $ocrWordId,
-            'userId' => $user->getId()
+            'user' => $user
         ));
         return $updated;
     }
