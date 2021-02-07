@@ -2,28 +2,26 @@
 
 namespace com\swayam\ocr\porua\dto;
 
-require_once __DIR__ . '/../dto/OcrCorrectionDto.php';
-
 use com\swayam\ocr\porua\model\OcrWordId;
 
 class OcrCorrectionDto {
 
-    private $ocrWordId;
-    private $correctedText;
+    private OcrWordId $ocrWordId;
+    private string $correctedText;
 
-    public function getOcrWordId() {
+    public function getOcrWordId(): OcrWordId {
         return $this->ocrWordId;
     }
 
-    public function getCorrectedText() {
+    public function getCorrectedText(): string {
         return $this->correctedText;
     }
 
-    public function setOcrWordId($ocrWordId): void {
+    public function setOcrWordId(OcrWordId $ocrWordId): void {
         $this->ocrWordId = $ocrWordId;
     }
 
-    public function setCorrectedText($correctedText): void {
+    public function setCorrectedText(string $correctedText): void {
         $this->correctedText = $correctedText;
     }
 

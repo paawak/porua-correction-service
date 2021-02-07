@@ -60,8 +60,8 @@ return [
         $entityManager = EntityManager::create($dbParams, $config);
         return $entityManager;
     },
-    OcrWordService::class => function (EntityManager $entityManager) {
-        return new OcrWordServiceImpl($entityManager);
+    OcrWordService::class => function (LoggerInterface $logger, EntityManager $entityManager) {
+        return new OcrWordServiceImpl($logger, $entityManager);
     },
     UserService::class => function (LoggerInterface $logger, EntityManager $entityManager) {
         return new UserServiceImpl($logger, $entityManager);

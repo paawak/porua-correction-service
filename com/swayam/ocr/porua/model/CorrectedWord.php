@@ -10,7 +10,7 @@ interface CorrectedWord {
 
     function getCorrectedText(): string;
 
-    function isIgnored(): boolean;
+    function isIgnored(): bool;
 
     function getUser(): UserDetails;
 }

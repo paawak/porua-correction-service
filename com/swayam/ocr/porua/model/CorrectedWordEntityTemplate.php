@@ -38,7 +38,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
     private string $correctedText;
 
     /** @Column(type="boolean") */
-    private boolean $ignored;
+    private bool $ignored;
 
     public function getId(): int {
         return $this->id;
@@ -56,7 +56,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         return $this->correctedText;
     }
 
-    public function isIgnored(): boolean {
+    public function isIgnored(): bool {
         return $this->ignored;
     }
 
@@ -76,7 +76,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         $this->correctedText = $correctedText;
     }
 
-    public function setIgnored(boolean $ignored): void {
+    public function setIgnored(bool $ignored): void {
         $this->ignored = $ignored;
     }
 

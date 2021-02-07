@@ -7,10 +7,10 @@ use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use com\swayam\ocr\porua\model\PageImage;
-use com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\OcrWordId;
 use com\swayam\ocr\porua\dto\OcrCorrectionDto;
 use com\swayam\ocr\porua\service\OcrWordService;
+use com\swayam\ocr\porua\service\UserService;
 
 require_once __DIR__ . '/../model/PageImage.php';
 require_once __DIR__ . '/../model/OcrWord.php';
@@ -59,8 +59,9 @@ class OCRCorrectionController {
         $updatedList = array();
 
         foreach ($rawOcrCorrectionDtoAsArray as $ocrCorrectionDtoAsArray) {
+            $user = $request->getAttribute(UserService::USER_DETAILS);
             $ocrCorrectionDto = OcrCorrectionDto::fromJsonArray($ocrCorrectionDtoAsArray);
-            $updated = 0;//$this->ocrWordService->updateCorrectTextInOcrWord($ocrCorrectionDto->getOcrWordId(), $correctedText, $user)
+            $updated = $this->ocrWordService->updateCorrectTextInOcrWord($ocrCorrectionDto->getOcrWordId(), $ocrCorrectionDto->getCorrectedText(), $user);
             array_push($updatedList, $updated);
         }
 
@@ -70,6 +71,7 @@ class OCRCorrectionController {
     }
 
     public function markOcrWordsAsIgnored(Request $request, Response $response) {
+        $user = $request->getAttribute(UserService::USER_DETAILS);
         $rawOcrWordIDsAsArray = $request->getParsedBody();
 
         if (!is_array($rawOcrWordIDsAsArray)) {
@@ -80,7 +82,7 @@ class OCRCorrectionController {
 
         foreach ($rawOcrWordIDsAsArray as $ocrWordIdAsArray) {
             $ocrWordId = OcrWordId::fromJsonArray($ocrWordIdAsArray);
-            $updated = 0;// $this->ocrWordService->markWordAsIgnored($ocrWordId, $user);
+            $updated = $this->ocrWordService->markWordAsIgnored($ocrWordId, $user);
             array_push($updatedList, $updated);
         }
 

@@ -3,6 +3,7 @@
 namespace com\swayam\ocr\porua\repo;
 
 use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use \com\swayam\ocr\porua\model\CorrectedWord;
 use com\swayam\ocr\porua\model\CorrectedWordEntityTemplate;
@@ -16,22 +17,27 @@ require_once __DIR__ . '/CorrectedWordRepository.php';
  */
 class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
 
-    private $entityManager;
+    private LoggerInterface $logger;
+    private EntityManager $entityManager;
 
-    public function __construct(EntityManager $entityManager) {
+    public function __construct(LoggerInterface $logger, EntityManager $entityManager) {
+        $this->logger = $logger;
         $this->entityManager = $entityManager;
     }
 
-    public function getCorrectedWord(int $ocrWordId, UserDetails $user): CorrectedWord {
+    public function getCorrectedWord(int $ocrWordId, UserDetails $user): ?CorrectedWord {
         $correctedWord = $this->getRepository()->findOneBy(array(
             'ocrWordId' => $ocrWordId,
-            'user.id' => $user->getId()
+            'user' => $user
         ));
         return $correctedWord;
     }
 
     public function save(CorrectedWord $entity): CorrectedWord {
-        return $this->entityManager->persist($entity);
+        $this->logger->info("Entity:", [$entity]);
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+        return $entity;
     }
 
     public function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int {
