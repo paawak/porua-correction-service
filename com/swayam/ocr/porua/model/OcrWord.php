@@ -7,25 +7,24 @@ namespace com\swayam\ocr\porua\model;
  * @author paawak
  */
 interface OcrWord {
-    
-    function getId():int;
 
-    function getOcrWordId():OcrWordId;
+    function getId(): int;
 
-    function getRawText():string;
+    function getOcrWordId(): OcrWordId;
 
-    function getX1():int;
+    function getRawText(): string;
 
-    function getY1():int;
+    function getX1(): int;
 
-    function getX2():int;
+    function getY1(): int;
 
-    function getY2():int;
+    function getX2(): int;
 
-    function getConfidence():float;
+    function getY2(): int;
 
-    function getLineNumber():int;
+    function getConfidence(): float;
+
+    function getLineNumber(): ?int;
 
     function getCorrectedWords(): array;
-    
 }

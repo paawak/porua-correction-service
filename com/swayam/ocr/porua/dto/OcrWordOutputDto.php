@@ -1,60 +1,25 @@
 <?php
 
-namespace com\swayam\ocr\porua\model;
+namespace com\swayam\ocr\porua\dto;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Embedded;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Column;
+use \com\swayam\ocr\porua\model\OcrWordId;
+use \com\swayam\ocr\porua\model\OcrWord;
+use \com\swayam\ocr\porua\model\CorrectedWord;
+use \com\swayam\ocr\porua\model\UserDetails;
 
-require_once __DIR__ . '/CorrectedWordEntityTemplate.php';
+class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
 
-/**
- * @Entity
- * @Table(name="rajshekhar_basu_mahabharat_bangla_ocr_word")
- */
-class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
-
-    /**
-     * @Id
-     * @Column(type="integer")
-     * @GeneratedValue(strategy="IDENTITY")
-     */
     private int $id;
-
-    /**
-     * @Embedded(class = "OcrWordId", columnPrefix=false) 
-     */
     private OcrWordId $ocrWordId;
-
-    /** @Column(name = "raw_text") */
     private string $rawText;
-
-    /** @Column(type="integer") */
     private int $x1;
-
-    /** @Column(type="integer") */
     private int $y1;
-
-    /** @Column(type="integer") */
     private int $x2;
-
-    /** @Column(type="integer") */
     private int $y2;
-
-    /** @Column(type="float") */
     private float $confidence;
-
-    /** @Column(name = "line_number", type="integer") */
     private $lineNumber;
-
-    /**
-     * @OneToMany(targetEntity="CorrectedWordEntityTemplate", mappedBy="ocrWordId")
-     */
-    private $correctedWords = array();
+    private string $correctedText;
+    private bool $ignored;
 
     public function getId(): int {
         return $this->id;
@@ -88,12 +53,24 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         return $this->confidence;
     }
 
-    public function getLineNumber(): ?int {        
+    public function getLineNumber(): ?int {
         return $this->lineNumber;
     }
 
+    public function getCorrectedText(): string {
+        return $this->correctedText;
+    }
+
     public function getCorrectedWords(): array {
-        return $this->correctedWords;
+        return null;
+    }
+
+    public function getUser(): UserDetails {
+        return null;
+    }
+
+    public function isIgnored(): bool {
+        return $this->ignored;
     }
 
     public function setId(int $id): void {
@@ -128,14 +105,18 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         $this->confidence = $confidence;
     }
 
-    public function setLineNumber(int $lineNumber): void {
+    public function setLineNumber(?int $lineNumber): void {
         $this->lineNumber = $lineNumber;
     }
 
-    public function setCorrectedWords(array $correctedWords): void {
-        $this->correctedWords = $correctedWords;
+    public function setCorrectedText(string $correctedText): void {
+        $this->correctedText = $correctedText;
     }
 
+    public function setIgnored(bool $ignored): void {
+        $this->ignored = $ignored;
+    }
+    
     public function jsonSerialize() {
         return get_object_vars($this);
     }

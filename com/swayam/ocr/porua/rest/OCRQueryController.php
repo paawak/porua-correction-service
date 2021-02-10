@@ -13,6 +13,7 @@ use com\swayam\ocr\porua\model\PageImage;
 use com\swayam\ocr\porua\model\OcrWord;
 use com\swayam\ocr\porua\model\OcrWordId;
 use com\swayam\ocr\porua\service\OcrWordService;
+use com\swayam\ocr\porua\service\UserService;
 
 require_once __DIR__ . '/../model/Book.php';
 require_once __DIR__ . '/../model/PageImage.php';
@@ -66,7 +67,8 @@ class OCRQueryController {
         $queryParams = $request->getQueryParams();
         $bookId = $queryParams["bookId"];
         $pageImageId = $queryParams["pageImageId"];
-        $words = $this->ocrWordService->getWords($bookId, $pageImageId);
+        $user = $request->getAttribute(UserService::USER_DETAILS);
+        $words = $this->ocrWordService->getWords($bookId, $pageImageId, $user);
         $payload = json_encode($words, JSON_PRETTY_PRINT);
         $response->getBody()->write($payload);
         return $response->withHeader('Content-Type', 'application/json');

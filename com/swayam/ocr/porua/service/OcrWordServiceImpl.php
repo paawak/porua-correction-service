@@ -9,6 +9,7 @@ use \com\swayam\ocr\porua\model\OcrWordId;
 use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\CorrectedWord;
 use \com\swayam\ocr\porua\model\CorrectedWordEntityTemplate;
+use \com\swayam\ocr\porua\dto\OcrWordOutputDto;
 use \com\swayam\ocr\porua\repo\OcrWordRepository;
 use \com\swayam\ocr\porua\repo\CorrectedWordRepository;
 use \com\swayam\ocr\porua\repo\OcrWordRepositoryImpl;
@@ -18,6 +19,7 @@ require_once __DIR__ . '/OcrWordService.php';
 require_once __DIR__ . '/../repo/OcrWordRepositoryImpl.php';
 require_once __DIR__ . '/../repo/CorrectedWordRepositoryImpl.php';
 require_once __DIR__ . '/../model/CorrectedWordEntityTemplate.php';
+require_once __DIR__ . '/../dto/OcrWordOutputDto.php';
 
 /**
  *
@@ -37,10 +39,25 @@ class OcrWordServiceImpl implements OcrWordService {
         return $this->getOcrWordRepository()->getWord($ocrWordId);
     }
 
-    public function getWords(int $bookId, int $pageImageId): array {
+    public function getWords(int $bookId, int $pageImageId, UserDetails $user): array {
         $ocrWords = $this->getOcrWordRepository()->getWordsInPage($bookId, $pageImageId);
-        
-        return $ocrWords;
+        $toOutputOcrWord = function(OcrWord $ocrWord) {
+            $output = new OcrWordOutputDto();
+            $output->setConfidence($ocrWord->getConfidence());
+            $output->setId($ocrWord->getId());
+            $lineNumber = $ocrWord->getLineNumber();
+            $output->setLineNumber($lineNumber);
+            $output->setOcrWordId($ocrWord->getOcrWordId());
+            $output->setRawText($ocrWord->getRawText());
+            $output->setX1($ocrWord->getX1());
+            $output->setX2($ocrWord->getX2());
+            $output->setY1($ocrWord->getY1());
+            $output->setY2($ocrWord->getY2());
+            //TODO set ignored
+            //TODO set corrected text
+            return $output;
+        };
+        return array_map($toOutputOcrWord, $ocrWords);
     }
 
     public function markWordAsIgnored(OcrWordId $ocrWordId, UserDetails $user): int {
@@ -64,15 +81,15 @@ class OcrWordServiceImpl implements OcrWordService {
             return 1;
         }
     }
-    
+
     private function getOcrWordRepository(): OcrWordRepository {
         return new OcrWordRepositoryImpl($this->entityManager);
     }
-    
+
     private function getCorrectedWordRepository(): CorrectedWordRepository {
         return new CorrectedWordRepositoryImpl($this->logger, $this->entityManager);
     }
-    
+
     private function toNewEntity(int $ocrWordId, UserDetails $user, string $correctedText): CorrectedWord {
         $correctedWord = new CorrectedWordEntityTemplate();
         $correctedWord->setOcrWordId($ocrWordId);
