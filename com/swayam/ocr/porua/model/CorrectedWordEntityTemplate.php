@@ -31,7 +31,10 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
      */
     private UserDetails $user;
 
-    /** @Column(name = "ocr_word_id", type="integer") */
+     /**
+     * @OneToOne(targetEntity="OcrWordEntityTemplate") 
+     * @JoinColumn(name="ocr_word_id", referencedColumnName="id") 
+     */
     private $ocrWordId;
 
     /** @Column(name = "corrected_text") */
@@ -68,7 +71,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         $this->user = $user;
     }
 
-    public function setOcrWordId(int $ocrWordId): void {
+    public function setOcrWordId($ocrWordId): void {
         $this->ocrWordId = $ocrWordId;
     }
 

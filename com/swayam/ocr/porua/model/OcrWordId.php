@@ -4,25 +4,21 @@ namespace com\swayam\ocr\porua\model;
 
 use Doctrine\ORM\Mapping\Embeddable;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Id;
 
 /** @Embeddable */
 class OcrWordId implements \JsonSerializable {
 
     /**
-     * @Id
      * @Column(name = "book_id", type="integer") 
      */
     private $bookId;
 
     /**
-     * @Id
      * @Column(name = "page_image_id", type="integer") 
      */
     private $pageImageId;
 
     /**
-     * @Id
      * @Column(name = "word_sequence_id", type="integer") 
      */
     private $wordSequenceId;
