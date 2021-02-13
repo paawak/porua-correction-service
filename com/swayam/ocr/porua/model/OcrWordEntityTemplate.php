@@ -3,10 +3,14 @@
 namespace com\swayam\ocr\porua\model;
 
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Embedded;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 
@@ -54,7 +58,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
     /**
      * @OneToMany(targetEntity="CorrectedWordEntityTemplate", mappedBy="ocrWordId")
      */
-    private $correctedWords = array();
+    private Collection $correctedWords;
 
     public function getId(): int {
         return $this->id;
@@ -88,11 +92,11 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         return $this->confidence;
     }
 
-    public function getLineNumber(): ?int {        
+    public function getLineNumber(): ?int {
         return $this->lineNumber;
     }
 
-    public function getCorrectedWords(): array {
+    public function getCorrectedWords(): Collection {
         return $this->correctedWords;
     }
 
@@ -132,7 +136,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
         $this->lineNumber = $lineNumber;
     }
 
-    public function setCorrectedWords(array $correctedWords): void {
+    public function setCorrectedWords(Collection $correctedWords): void {
         $this->correctedWords = $correctedWords;
     }
 

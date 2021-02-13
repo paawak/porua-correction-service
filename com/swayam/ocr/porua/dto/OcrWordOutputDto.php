@@ -6,6 +6,7 @@ use \com\swayam\ocr\porua\model\OcrWordId;
 use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\CorrectedWord;
 use \com\swayam\ocr\porua\model\UserDetails;
+use Doctrine\Common\Collections\Collection;
 
 class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
 
@@ -61,7 +62,7 @@ class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
         return $this->correctedText;
     }
 
-    public function getCorrectedWords(): array {
+    public function getCorrectedWords(): Collection {
         return null;
     }
 

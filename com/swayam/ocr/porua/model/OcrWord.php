@@ -2,6 +2,8 @@
 
 namespace com\swayam\ocr\porua\model;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  *
  * @author paawak
@@ -26,5 +28,5 @@ interface OcrWord {
 
     function getLineNumber(): ?int;
 
-    function getCorrectedWords(): array;
+    function getCorrectedWords(): Collection;
 }

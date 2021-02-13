@@ -32,7 +32,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
     private UserDetails $user;
 
     /** @Column(name = "ocr_word_id", type="integer") */
-    private int $ocrWordId;
+    private $ocrWordId;
 
     /** @Column(name = "corrected_text") */
     private string $correctedText;

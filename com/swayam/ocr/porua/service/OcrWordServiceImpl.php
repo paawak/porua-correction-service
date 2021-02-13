@@ -55,6 +55,7 @@ class OcrWordServiceImpl implements OcrWordService {
             $output->setY2($ocrWord->getY2());
             //TODO set ignored
             //TODO set corrected text
+            $this->logger->debug("********************", array($ocrWord->getId(), $ocrWord->getCorrectedWords()->count()));
             return $output;
         };
         return array_map($toOutputOcrWord, $ocrWords);
