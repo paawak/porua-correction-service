@@ -3,6 +3,7 @@
 namespace com\swayam\ocr\porua\repo;
 
 use \com\swayam\ocr\porua\model\CorrectedWord;
+use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\UserDetails;
 
 /**
@@ -11,12 +12,12 @@ use \com\swayam\ocr\porua\model\UserDetails;
  */
 interface CorrectedWordRepository {
 
-    function getCorrectedWord(int $ocrWordId, UserDetails $user): ?CorrectedWord;
+    function getCorrectedWord(OcrWord $ocrWord, UserDetails $user): ?CorrectedWord;
 
     function save(CorrectedWord $entity): CorrectedWord;
 
-    function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int;
+    function updateCorrectedText(OcrWord $ocrWord, string $correctedText, UserDetails $user): int;
 
-    function markAsIgnored(int $ocrWordId, UserDetails $user): int;
+    function markAsIgnored(OcrWord $ocrWord, UserDetails $user): int;
     
 }

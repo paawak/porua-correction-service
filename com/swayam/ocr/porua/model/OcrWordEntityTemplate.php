@@ -56,7 +56,7 @@ class OcrWordEntityTemplate implements OcrWord, \JsonSerializable {
     private $lineNumber;
 
     /**
-     * @OneToMany(targetEntity="CorrectedWordEntityTemplate", mappedBy="ocrWordId")
+     * @OneToMany(targetEntity="CorrectedWordEntityTemplate", mappedBy="ocrWord")
      */
     private Collection $correctedWords;
 

@@ -63,22 +63,22 @@ class OcrWordServiceImpl implements OcrWordService {
 
     public function markWordAsIgnored(OcrWordId $ocrWordId, UserDetails $user): int {
         $ocrWord = $this->getWord($ocrWordId);
-        $existingCorrection = $this->getCorrectedWordRepository()->getCorrectedWord($ocrWord->getId(), $user);
+        $existingCorrection = $this->getCorrectedWordRepository()->getCorrectedWord($ocrWord, $user);
         if ($existingCorrection) {
-            return $this->getCorrectedWordRepository()->markAsIgnored($ocrWord->getId(), $user);
+            return $this->getCorrectedWordRepository()->markAsIgnored($ocrWord, $user);
         } else {
-            $this->getCorrectedWordRepository()->save($this->toNewEntity($ocrWord->getId(), $user, ''));
+            $this->getCorrectedWordRepository()->save($this->toNewEntity($ocrWord, $user, ''));
             return 1;
         }
     }
 
     public function updateCorrectTextInOcrWord(OcrWordId $ocrWordId, string $correctedText, UserDetails $user): int {
         $ocrWord = $this->getWord($ocrWordId);
-        $existingCorrection = $this->getCorrectedWordRepository()->getCorrectedWord($ocrWord->getId(), $user);
+        $existingCorrection = $this->getCorrectedWordRepository()->getCorrectedWord($ocrWord, $user);
         if ($existingCorrection) {
-            return $this->getCorrectedWordRepository()->updateCorrectedText($ocrWord->getId(), $correctedText, $user);
+            return $this->getCorrectedWordRepository()->updateCorrectedText($ocrWord, $correctedText, $user);
         } else {
-            $this->getCorrectedWordRepository()->save($this->toNewEntity($ocrWord->getId(), $user, $correctedText));
+            $this->getCorrectedWordRepository()->save($this->toNewEntity($ocrWord, $user, $correctedText));
             return 1;
         }
     }
@@ -91,9 +91,9 @@ class OcrWordServiceImpl implements OcrWordService {
         return new CorrectedWordRepositoryImpl($this->logger, $this->entityManager);
     }
 
-    private function toNewEntity(int $ocrWordId, UserDetails $user, string $correctedText): CorrectedWord {
+    private function toNewEntity(OcrWord $ocrWord, UserDetails $user, string $correctedText): CorrectedWord {
         $correctedWord = new CorrectedWordEntityTemplate();
-        $correctedWord->setOcrWordId($ocrWordId);
+        $correctedWord->setOcrWord($ocrWord);
         $correctedWord->setUser($user);
         if ($correctedText) {
             $correctedWord->setCorrectedText($correctedText);

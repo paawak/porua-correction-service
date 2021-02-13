@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Psr\Log\LoggerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use \com\swayam\ocr\porua\model\CorrectedWord;
+use \com\swayam\ocr\porua\model\OcrWord;
 use com\swayam\ocr\porua\model\CorrectedWordEntityTemplate;
 use \com\swayam\ocr\porua\model\UserDetails;
 
@@ -25,9 +26,9 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
         $this->entityManager = $entityManager;
     }
 
-    public function getCorrectedWord(int $ocrWordId, UserDetails $user): ?CorrectedWord {
+    public function getCorrectedWord(OcrWord $ocrWord, UserDetails $user): ?CorrectedWord {
         $correctedWord = $this->getRepository()->findOneBy(array(
-            'ocrWordId' => $ocrWordId,
+            'ocrWord' => $ocrWord,
             'user' => $user
         ));
         return $correctedWord;
@@ -40,22 +41,22 @@ class CorrectedWordRepositoryImpl implements CorrectedWordRepository {
         return $entity;
     }
 
-    public function updateCorrectedText(int $ocrWordId, string $correctedText, UserDetails $user): int {
-        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.correctedText = :correctedText WHERE word.ocrWordId = :ocrWordId AND word.user = :user";
+    public function updateCorrectedText(OcrWord $ocrWord, string $correctedText, UserDetails $user): int {
+        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.correctedText = :correctedText WHERE word.ocrWord = :ocrWord AND word.user = :user";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
-            'ocrWordId' => $ocrWordId,
+            'ocrWord' => $ocrWord,
             'correctedText' => $correctedText,
             'user' => $user
         ));
         return $updated;
     }
 
-    public function markAsIgnored(int $ocrWordId, UserDetails $user): int {
-        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.ignored = TRUE WHERE word.ocrWordId = :ocrWordId AND word.user = :user";
+    public function markAsIgnored(OcrWord $ocrWord, UserDetails $user): int {
+        $sql = "UPDATE " . CorrectedWordEntityTemplate::class . " word SET word.ignored = TRUE WHERE word.ocrWord = :ocrWord AND word.user = :user";
         $updateQuery = $this->entityManager->createQuery($sql);
         $updated = $updateQuery->execute(array(
-            'ocrWordId' => $ocrWordId,
+            'ocrWord' => $ocrWord,
             'user' => $user
         ));
         return $updated;
