@@ -53,9 +53,36 @@ class OcrWordServiceImpl implements OcrWordService {
             $output->setX2($ocrWord->getX2());
             $output->setY1($ocrWord->getY1());
             $output->setY2($ocrWord->getY2());
+
+            $correctedWordsAll = $ocrWord->getCorrectedWords();
+
+            if ($correctedWordsAll->isEmpty()) {
+                return $output;
+            }
+
             //TODO set ignored
             //TODO set corrected text
-            $this->logger->debug("********************", array($ocrWord->getId(), $ocrWord->getCorrectedWords()->count()));
+
+            $this->logger->debug("********************", array($ocrWord->getId(), $correctedWordsAll->count()));
+
+
+
+//            $correctedWords->forAll(function($var) {
+//                $this->logger->info("*************************CorrectedWords: ", array($var));
+//            });
+//            if ($correctedWords) {
+//                $filterByUserIdOrAdminUser = function(CorrectedWord $correctedWord) {
+//                    $user = $correctedWord->getUser();
+//                    return ($user->getRole() === UserRole::ADMIN_ROLE) || ($user->getId() === $user->getId());
+//                };
+//                $correctedWordsFilteredByUser = $correctedWords->filter($filterByUserIdOrAdminUser);
+//                $this->logger->info("*************************CorrectedWords: ", array($correctedWordsFilteredByUser));
+//                $correctedWord = $correctedWordsFilteredByUser->first();
+//                if ($correctedWord) {
+//                    $output->setIgnored($correctedWord->isIgnored());
+//                    $output->setCorrectedText($correctedWord->getCorrectedText());
+//                }
+//            }
             return $output;
         };
         return array_map($toOutputOcrWord, $ocrWords);
