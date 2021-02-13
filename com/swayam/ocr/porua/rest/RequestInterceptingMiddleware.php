@@ -28,7 +28,7 @@ class RequestInterceptingMiddleware {
     }
 
     public function __invoke(ServerRequestInterface $request, RequestHandler $handler): Response {
-        $this->logger->info("Handling request of type: " . $request->getMethod() . ", with target-uri: " . $request->getRequestTarget());
+//        $this->logger->debug("Handling request of type: " . $request->getMethod() . ", with target-uri: " . $request->getRequestTarget());
 
         if ($request->getRequestTarget() === '/') {
             return $handler->handle($request);
@@ -50,7 +50,7 @@ class RequestInterceptingMiddleware {
             return $this->getNotAuthorizedResponse('Could not find authorization token');
         }
 
-        $this->logger->debug('IdToken from OAuth2: ' . $idToken);
+//        $this->logger->debug('IdToken from OAuth2: ' . $idToken);
 
         $payload = $this->verifyGoogleTokenAndExtractToken($idToken);
 
@@ -81,10 +81,10 @@ class RequestInterceptingMiddleware {
         $client = new \Google_Client(['client_id' => self::CLIENT_ID]);
         $payload = $client->verifyIdToken($idToken);
         if ($payload) {
-            $this->logger->debug('Payload: ', $payload);
+//            $this->logger->debug('Payload: ', $payload);
             return $payload;
         } else {
-            $this->logger->info('User idToken not valid');
+            $this->logger->warn('User idToken not valid');
             return null;
         }
     }
@@ -98,7 +98,7 @@ class RequestInterceptingMiddleware {
 
     private function getAuthFromGetRequest(ServerRequestInterface $request): string {
         $queryParams = $request->getQueryParams();
-        $this->logger->debug('query params: ', $queryParams);
+//        $this->logger->debug('query params: ', $queryParams);
         return $queryParams[self::AUTH_HEADER_NAME];
     }
 
