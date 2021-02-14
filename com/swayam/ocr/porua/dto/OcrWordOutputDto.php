@@ -19,7 +19,7 @@ class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
     private int $y2;
     private float $confidence;
     private $lineNumber;
-    private string $correctedText;
+    private $correctedText;
     private bool $ignored;
 
     public function getId(): int {
@@ -58,7 +58,7 @@ class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
         return $this->lineNumber;
     }
 
-    public function getCorrectedText(): string {
+    public function getCorrectedText(): ?string {
         return $this->correctedText;
     }
 
@@ -110,7 +110,7 @@ class OcrWordOutputDto implements OcrWord, CorrectedWord, \JsonSerializable {
         $this->lineNumber = $lineNumber;
     }
 
-    public function setCorrectedText(string $correctedText): void {
+    public function setCorrectedText(?string $correctedText): void {
         $this->correctedText = $correctedText;
     }
 

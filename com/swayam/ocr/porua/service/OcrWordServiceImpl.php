@@ -3,6 +3,7 @@
 namespace com\swayam\ocr\porua\service;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Collections\Collection;
 use Psr\Log\LoggerInterface;
 use \com\swayam\ocr\porua\model\UserDetails;
 use \com\swayam\ocr\porua\model\OcrWordId;
@@ -43,43 +44,8 @@ class OcrWordServiceImpl implements OcrWordService {
 
     public function getWords(int $bookId, int $pageImageId, UserDetails $user): array {
         $ocrWords = $this->getOcrWordRepository()->getWordsInPage($bookId, $pageImageId);
-        $toOutputOcrWord = function(OcrWord $ocrWord) {
-            $output = new OcrWordOutputDto();
-            $output->setConfidence($ocrWord->getConfidence());
-            $output->setId($ocrWord->getId());
-            $lineNumber = $ocrWord->getLineNumber();
-            $output->setLineNumber($lineNumber);
-            $output->setOcrWordId($ocrWord->getOcrWordId());
-            $output->setRawText($ocrWord->getRawText());
-            $output->setX1($ocrWord->getX1());
-            $output->setX2($ocrWord->getX2());
-            $output->setY1($ocrWord->getY1());
-            $output->setY2($ocrWord->getY2());
-
-            $correctedWordsAll = $ocrWord->getCorrectedWords();
-
-            if ($correctedWordsAll->isEmpty()) {
-                return $output;
-            }
-
-            $correctedWord = $correctedWordsAll->filter(function(CorrectedWord $correctedWord) {
-                        $user = $correctedWord->getUser();
-                        return ($user->getRole() === UserRole::ADMIN_ROLE) || ($user->getId() === $user->getId());
-                    })->first();
-
-            $this->logger->debug("Corrected word by User or Admin", array($correctedWord));
-
-            if ($correctedWord) {
-                $output->setIgnored($correctedWord->isIgnored());
-                $correctedText = $correctedWord->getCorrectedText();
-                if ($correctedText) {
-                    $output->setCorrectedText($correctedText);
-                }
-            }
-
-            return $output;
-        };
-        return array_map($toOutputOcrWord, $ocrWords);
+        $allOcrWordsAsOutput = array_map(fn(OcrWord $ocrWord) => $this->toOutputOcrWord($ocrWord, $user), $ocrWords);
+        return array_filter($allOcrWordsAsOutput, fn(OcrWordOutputDto $dto) => !$dto->isIgnored());
     }
 
     public function markWordAsIgnored(OcrWordId $ocrWordId, UserDetails $user): int {
@@ -123,6 +89,44 @@ class OcrWordServiceImpl implements OcrWordService {
             $correctedWord->setIgnored(true);
         }
         return $correctedWord;
+    }
+
+    private function toOutputOcrWord(OcrWord $ocrWord, UserDetails $user): OcrWordOutputDto {
+        $output = new OcrWordOutputDto();
+        $output->setConfidence($ocrWord->getConfidence());
+        $output->setId($ocrWord->getId());
+        $output->setLineNumber($ocrWord->getLineNumber());
+        $output->setOcrWordId($ocrWord->getOcrWordId());
+        $output->setRawText($ocrWord->getRawText());
+        $output->setX1($ocrWord->getX1());
+        $output->setX2($ocrWord->getX2());
+        $output->setY1($ocrWord->getY1());
+        $output->setY2($ocrWord->getY2());
+        $output->setIgnored(false);
+
+        $correctedWordsAll = $ocrWord->getCorrectedWords();
+
+        if ($correctedWordsAll->isEmpty()) {
+            return $output;
+        }
+
+        $this->setCorrection($output, $correctedWordsAll, $user);
+
+        return $output;
+    }
+
+    private function setCorrection(OcrWordOutputDto $output, Collection $correctedWordsAll, UserDetails $user): void {
+        $correctedWord = $correctedWordsAll->filter(function(CorrectedWord $correctedWord)use ($user) {
+                    $correctedWordUser = $correctedWord->getUser();
+                    return ($correctedWordUser->getRole() === UserRole::ADMIN_ROLE) || ($correctedWordUser->getId() === $user->getId());
+                })->first();
+
+        $this->logger->debug("Corrected word by User or Admin", array($correctedWord));
+
+        if ($correctedWord) {
+            $output->setIgnored($correctedWord->isIgnored());
+            $output->setCorrectedText($correctedWord->getCorrectedText());
+        }
     }
 
 }
