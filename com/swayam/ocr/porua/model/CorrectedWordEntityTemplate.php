@@ -38,7 +38,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
     private OcrWord $ocrWord;
 
     /** @Column(name = "corrected_text") */
-    private string $correctedText;
+    private $correctedText;
 
     /** @Column(type="boolean") */
     private bool $ignored;
@@ -55,7 +55,7 @@ class CorrectedWordEntityTemplate implements CorrectedWord, \JsonSerializable {
         return $this->ocrWord;
     }
 
-    public function getCorrectedText(): string {
+    public function getCorrectedText(): ?string {
         return $this->correctedText;
     }
 

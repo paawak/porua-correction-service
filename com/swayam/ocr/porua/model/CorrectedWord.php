@@ -8,7 +8,7 @@ namespace com\swayam\ocr\porua\model;
  */
 interface CorrectedWord {
 
-    function getCorrectedText(): string;
+    function getCorrectedText(): ?string;
 
     function isIgnored(): bool;
 

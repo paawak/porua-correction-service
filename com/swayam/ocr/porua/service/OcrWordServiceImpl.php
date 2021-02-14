@@ -9,6 +9,7 @@ use \com\swayam\ocr\porua\model\OcrWordId;
 use \com\swayam\ocr\porua\model\OcrWord;
 use \com\swayam\ocr\porua\model\CorrectedWord;
 use \com\swayam\ocr\porua\model\CorrectedWordEntityTemplate;
+use com\swayam\ocr\porua\model\UserRole;
 use \com\swayam\ocr\porua\dto\OcrWordOutputDto;
 use \com\swayam\ocr\porua\repo\OcrWordRepository;
 use \com\swayam\ocr\porua\repo\CorrectedWordRepository;
@@ -19,6 +20,7 @@ require_once __DIR__ . '/OcrWordService.php';
 require_once __DIR__ . '/../repo/OcrWordRepositoryImpl.php';
 require_once __DIR__ . '/../repo/CorrectedWordRepositoryImpl.php';
 require_once __DIR__ . '/../model/CorrectedWordEntityTemplate.php';
+require_once __DIR__ . '/../model/UserRole.php';
 require_once __DIR__ . '/../dto/OcrWordOutputDto.php';
 
 /**
@@ -60,29 +62,21 @@ class OcrWordServiceImpl implements OcrWordService {
                 return $output;
             }
 
-            //TODO set ignored
-            //TODO set corrected text
+            $correctedWord = $correctedWordsAll->filter(function(CorrectedWord $correctedWord) {
+                        $user = $correctedWord->getUser();
+                        return ($user->getRole() === UserRole::ADMIN_ROLE) || ($user->getId() === $user->getId());
+                    })->first();
 
-            $this->logger->debug("********************", array($ocrWord->getId(), $correctedWordsAll->count()));
+            $this->logger->debug("Corrected word by User or Admin", array($correctedWord));
 
+            if ($correctedWord) {
+                $output->setIgnored($correctedWord->isIgnored());
+                $correctedText = $correctedWord->getCorrectedText();
+                if ($correctedText) {
+                    $output->setCorrectedText($correctedText);
+                }
+            }
 
-
-//            $correctedWords->forAll(function($var) {
-//                $this->logger->info("*************************CorrectedWords: ", array($var));
-//            });
-//            if ($correctedWords) {
-//                $filterByUserIdOrAdminUser = function(CorrectedWord $correctedWord) {
-//                    $user = $correctedWord->getUser();
-//                    return ($user->getRole() === UserRole::ADMIN_ROLE) || ($user->getId() === $user->getId());
-//                };
-//                $correctedWordsFilteredByUser = $correctedWords->filter($filterByUserIdOrAdminUser);
-//                $this->logger->info("*************************CorrectedWords: ", array($correctedWordsFilteredByUser));
-//                $correctedWord = $correctedWordsFilteredByUser->first();
-//                if ($correctedWord) {
-//                    $output->setIgnored($correctedWord->isIgnored());
-//                    $output->setCorrectedText($correctedWord->getCorrectedText());
-//                }
-//            }
             return $output;
         };
         return array_map($toOutputOcrWord, $ocrWords);
