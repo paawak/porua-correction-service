@@ -45,7 +45,7 @@ class OcrWordServiceImpl implements OcrWordService {
     public function getWords(int $bookId, int $pageImageId, UserDetails $user): array {
         $ocrWords = $this->getOcrWordRepository()->getWordsInPage($bookId, $pageImageId);
         $allOcrWordsAsOutput = array_map(fn(OcrWord $ocrWord) => $this->toOutputOcrWord($ocrWord, $user), $ocrWords);
-        return array_filter($allOcrWordsAsOutput, fn(OcrWordOutputDto $dto) => !$dto->isIgnored());
+        return array_values(array_filter($allOcrWordsAsOutput, fn(OcrWordOutputDto $dto) => !$dto->isIgnored()));
     }
 
     public function markWordAsIgnored(OcrWordId $ocrWordId, UserDetails $user): int {
