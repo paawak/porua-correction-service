@@ -1,8 +1,13 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require __DIR__ . '/com/swayam/ocr/porua/rest/IndexController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/OCRQueryController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/OCRCorrectionController.php';
+require __DIR__ . '/com/swayam/ocr/porua/rest/UserController.php';
 require __DIR__ . '/com/swayam/ocr/porua/rest/RequestInterceptingMiddleware.php';
 
 use DI\Bridge\Slim\Bridge;
@@ -12,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use com\swayam\ocr\porua\rest\IndexController;
 use com\swayam\ocr\porua\rest\OCRQueryController;
 use com\swayam\ocr\porua\rest\OCRCorrectionController;
+use com\swayam\ocr\porua\rest\UserController;
 use com\swayam\ocr\porua\rest\RequestInterceptingMiddleware;
 
 $container = require __DIR__ . '/com/swayam/ocr/porua/config/DIContainerBootstrap.php';
@@ -44,6 +50,7 @@ $app->get('/ocr/train/query/book/{bookId}/page-count', [OCRQueryController::clas
 $app->get('/ocr/train/query/page', [OCRQueryController::class, 'getPagesInBook']);
 $app->get('/ocr/train/query/word', [OCRQueryController::class, 'getWordsInPage']);
 $app->get('/ocr/train/query/word/image', [OCRQueryController::class, 'getWordImage']);
+$app->get('/ocr/train/user/register', [UserController::class, 'register']);
 
 $app->put('/ocr/train/correction/page/ignore/{pageImageId}', [OCRCorrectionController::class, 'markPageAsIgnored']);
 $app->put('/ocr/train/correction/page/complete/{pageImageId}', [OCRCorrectionController::class, 'markPageAsCompleted']);
