@@ -29,10 +29,14 @@ return [
         $fileHandler->setFormatter($formatter);
         $logger->pushHandler($fileHandler);
 
-        if ($container->get('logger.console') === true) {
-            $consoleHandler = new StreamHandler('php://stdout', Logger::DEBUG);
-            $consoleHandler->setFormatter($formatter);
-            $logger->pushHandler($consoleHandler);
+        try {
+            if ($container->get('logger.console') === true) {
+                $consoleHandler = new StreamHandler('php://stdout', Logger::DEBUG);
+                $consoleHandler->setFormatter($formatter);
+                $logger->pushHandler($consoleHandler);
+            }
+        } catch (Exception $ex) {
+            $logger->warning("Console not enabled");
         }
 
         $logger->pushProcessor(new IntrospectionProcessor());
