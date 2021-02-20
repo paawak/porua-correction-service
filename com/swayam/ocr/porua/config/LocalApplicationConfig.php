@@ -4,7 +4,7 @@ return [
     'database.host' => 'localhost',
     'database.user' => 'root',
     'database.password' => 'root123',
-    'database.name' => 'exp_to_b_del',
+    'database.name' => 'porua',
     'database.driver' => 'pdo_mysql',
     'cors.allow-origin' => 'http://localhost:3000',
     'ocr.imageStore' => '/kaaj/source/porua/tesseract-ocr-rest/images/',
