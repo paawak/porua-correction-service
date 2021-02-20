@@ -25,7 +25,7 @@ class UserServiceImpl implements UserService {
         $this->entityManager = $entityManager;
     }
 
-    public function fetchExistingUser(array $payload): UserDetails {
+    public function fetchExistingUser(array $payload): ?UserDetails {
         $userDetails = $this->entityManager->getRepository(UserDetails::class)->findOneBy(array(
             'email' => $payload['email']
         ));
