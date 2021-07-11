@@ -89,3 +89,20 @@ Github link: <https://github.com/Seldaek/monolog>
 1.  curl -X OPTIONS -i  "https://ocrservice.paawak.me"
 
 1.  curl -X GET -i  "https://ocrservice.paawak.me/train/book/1"
+
+## Common Problems After Server Deployment
+### /register stopped working
+#### Problem
+All of a sudden, the below URL stopped working on my Server:
+<https://ocrservice.paawak.me/ocr/train/user/register>
+
+I got the HTTP Status Code: *HTTP/1.1 409 Conflict*
+
+The response returned was:
+```xml
+<script>document.cookie = "humans_21909=1"; document.location.reload(true)</script>
+```
+
+#### Solution
+
+In this Stackoverflow article <https://stackoverflow.com/questions/55915264/scriptdocument-cookie-humans-21909-1-document-location-reloadtrue-scri> as mentioned, renaming */register* to */registration* solved the issue. Seems like to be a problem of my hosting, where they block certain URLs for security reasons.

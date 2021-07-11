@@ -50,7 +50,7 @@ $app->get('/ocr/train/query/book/{bookId}/page-count', [OCRQueryController::clas
 $app->get('/ocr/train/query/page', [OCRQueryController::class, 'getPagesInBook']);
 $app->get('/ocr/train/query/word', [OCRQueryController::class, 'getWordsInPage']);
 $app->get('/ocr/train/query/word/image', [OCRQueryController::class, 'getWordImage']);
-$app->get('/ocr/train/user/register', [UserController::class, 'register']);
+$app->get('/ocr/train/user/registration', [UserController::class, 'registration']);
 
 $app->put('/ocr/train/correction/page/ignore/{pageImageId}', [OCRCorrectionController::class, 'markPageAsIgnored']);
 $app->put('/ocr/train/correction/page/complete/{pageImageId}', [OCRCorrectionController::class, 'markPageAsCompleted']);

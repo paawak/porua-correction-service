@@ -19,7 +19,7 @@ class UserController {
         $this->entityManager = $entityManager;
     }
 
-    public function register(Request $request, Response $response) {
+    public function registration(Request $request, Response $response) {
         $userDetails = $request->getAttribute(UserService::USER_DETAILS);
         $payload = json_encode($userDetails, JSON_PRETTY_PRINT);
         $response->getBody()->write($payload);
